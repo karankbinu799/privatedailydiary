@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+  <!-- jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="../styles/authstyles.css">
+
+</head>
+<%- include('header') %>
+  <%- include('Toast')%>
+    <div class="bg"></div>
+    <div class="container">
+      <h2>Signup</h2>
+      <form action="/signup" method="post">
+        <div class="form-group"> <input type="text" id="username" name="username" placeholder="Username" required>
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="form-group"> <input type="email" id="email" name="email" placeholder="Email" required> <i
+            class="fas fa-envelope"></i> </div>
+        <div class="form-group">
+          <abbr style="color: red;text-decoration: none;"
+            title="Use a password combination that has uppercase and lowercase mixed with numbers and symbols">
+            <input type="password" id="password" name="password" placeholder="Password" required></abbr>
+          <i class="fas fa-eye mr-4" id="togglePassword"></i>
+          <i class="fas fa-lock"></i>
+        </div>
+        <div class="form-group">
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+          <i class="fas fa-eye mr-4" id="toggleConfirmPassword"></i>
+          <i class="fas fa-lock"></i>
+        </div>
+        <div class="form-group">
+          <input type="password" id="TSVCinput" name="TSVCinput"
+            placeholder="Create a 4 Digit two step verfication code" required>
+          <i class="fas fa-eye mr-4" id="toggleTSVCinput"></i>
+          <i class="fas fa-lock"></i>
+        </div>
+
+        <div class="text-center">
+
+          <p id="res" style="font-weight: bold;"></p>
+
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <div class="text-center mt-4">
+        <strong> Already have an account? </strong><a href="/login/"
+          style="color:rgb(255, 255, 255);font-weight: bold;">Click Here to
+          Login</a>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const togglePassword = document.getElementById('togglePassword');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const TSVCinput = document.getElementById('TSVCinput');
+        const toggleTSVCinput = document.getElementById('toggleTSVCinput');
+
+        confirmPasswordInput.addEventListener('input', function () {
+          if (passwordInput.value !== confirmPasswordInput.value) {
+            document.getElementById('res').innerHTML = "Passwords do not match";
+            res.style.color = "red";
+            res.style.backgroundColor = "white";
+            res.style.borderRadius = "50px";
+          } else {
+            document.getElementById('res').innerHTML = "";
+          }
+        });
+        TSVCinput.addEventListener('input', function (event) {
+          const TSVCinputval = TSVCinput.value;
+          const msg = document.getElementById('res');
+
+          if (TSVCinputval === "" || TSVCinputval === null) {
+            msg.innerHTML = 'Please enter a valid 4-digit Security Code; it cannot be a null field.';
+          } else if (isNaN(TSVCinputval)) {
+            msg.innerHTML = 'Security code must only contain numbers.';
+          } else if (TSVCinputval.length !== 4) {
+            msg.innerHTML = 'Code should be a 4-digit number.';
+          } else {
+            msg.innerHTML = '';
+          }
+        });
+
+        passwordInput.addEventListener('input', function () {
+          const password = passwordInput.value;
+          const res = document.getElementById('res');
+          // Regular expressions for checking various criteria
+          const hasUppercase = /[A-Z]/.test(password);
+          const hasLowercase = /[a-z]/.test(password);
+          const hasNumber = /\d/.test(password);
+          const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+          // Count the number of criteria met
+          let criteriaMet = 0;
+          if (hasUppercase) criteriaMet++;
+          if (hasLowercase) criteriaMet++;
+          if (hasNumber) criteriaMet++;
+          if (hasSpecialChar) criteriaMet++;
+
+          // Determine strength based on the number of criteria met
+          if (password.length < 6 || criteriaMet < 3) {
+            res.innerHTML = "Too weak password";
+            res.style.color = "red";
+            res.style.backgroundColor = "white";
+            res.style.borderRadius = "50px";
+
+          } else if (password.length < 10 || criteriaMet < 4) {
+            res.innerHTML = "Medium password";
+            res.style.color = "orange";
+            res.style.backgroundColor = "white";
+            res.style.borderRadius = "50px";
+          } else {
+            res.innerHTML = "Strong password";
+            res.style.color = "green";
+            res.style.backgroundColor = "white";
+            res.style.borderRadius = "50px";
+
+          }
+        });
+        toggleTSVCinput.addEventListener('click', function () {
+          togglePasswordIcon(TSVCinput);
+          toggleTSVCinput.classList.toggle('fa-eye-slash');
+        });
+        togglePassword.addEventListener('click', function () {
+          togglePasswordIcon(passwordInput);
+          togglePassword.classList.toggle('fa-eye-slash');
+        });
+
+        toggleConfirmPassword.addEventListener('click', function () {
+          togglePasswordIcon(confirmPasswordInput);
+          toggleConfirmPassword.classList.toggle('fa-eye-slash');
+        });
+
+        function togglePasswordIcon(input) {
+          const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+          input.setAttribute('type', type);
+        }
+      });
+    </script>
+
+
+    </body>
+
+</html>

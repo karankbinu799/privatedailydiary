@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        /* Add your styles here */
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .navbar-nav {
+            position: fixed;
+            top: 70px;
+            left: -100%;
+            width: 250px;
+            height: 100%;
+            background-color: #1860d4;
+            display: flex;
+            flex-direction: column;
+            padding: 5px;
+            transition: left 0.3s ease-in-out;
+        }
+
+        #closeBtn {
+            position: absolute;
+            top: 100%;
+            right: 10px;
+            margin-right: 30%;
+            cursor: pointer;
+            color: white;
+            font-size: 34px;
+            border-radius: 50px;
+            background-color: #1fa3e1ac;
+            padding: 0px 15px 0px 15px;
+            z-index: 9999;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-nav.show {
+                left: 0;
+            }
+
+            .navbar-brand {
+                margin-right: 10px;
+                margin-left: 10px;
+            }
+
+            #toggleBtn {
+                display: block;
+            }
+
+            .navbar-toggler-icon {
+                display: inline-block;
+            }
+
+            #closeBtn {
+                display: none;
+            }
+
+            .navbar-nav {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-left: 10px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            #toggleBtn {
+                display: none;
+            }
+
+            .navbar-toggler-icon {
+                display: none;
+            }
+
+            .navbar-nav {
+                position: relative;
+                top: auto;
+                left: auto;
+                width: auto;
+                height: auto;
+                background-color: transparent;
+                flex-direction: row !important;
+            }
+
+            #closeBtn {
+                display: none;
+            }
+
+            .navbar-brand-pdd {
+                margin-left: 5px;
+                margin-right: -1px;
+            }
+        }
+
+        /* Additional styles for "PDD" */
+        .navbar-brand-pdd {
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #fff;
+            letter-spacing: 8px;
+        }
+
+        /* Additional styles for the description */
+        .navbar-description {
+            font-size: 9px;
+            color: #fff;
+            margin-top: -10px;
+        }
+
+        /* Additional styles for the image */
+        .navbar-img {
+            margin-left: auto;
+            margin-right: 10px;
+        }
+
+        /* Additional styles for nav-item ml-4s and nav-link */
+        .navbar-nav .nav-item ml-4 {
+            margin-bottom: 10px;
+            font-family: 'Orbitron', sans-serif;
+            /* Additional styling as needed */
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 18px;
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ffd700;
+            /* Change the color on hover as needed */
+        }
+
+        .border {
+            background-color: #000000;
+            border-radius: 25%;
+            margin-bottom: -5px;
+            margin-top: -5px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#toggleBtn").click(function () {
+                $(".navbar-nav").toggleClass("show");
+                $("#closeBtn").toggle();
+            });
+
+            $("#closeBtn").click(function () {
+                $(".navbar-nav").removeClass("show");
+                $("#closeBtn").hide();
+            });
+        });
+
+
+
+    </script>
+    <script>
+        var continueCalling = true; // Variable to control whether to continue calling the function
+
+        function setActiveLink() {
+            // Getting the current URL
+            var currentURL = window.location.href;
+
+            var state = false;
+
+            // Accessing the href attributes of the anchor links
+            var linkElements = document.querySelectorAll("a");
+            if (linkElements.length > 0) {
+                linkElements.forEach(function (linkElement) {
+                    var hrefValue = linkElement.href;
+                    if (hrefValue === currentURL) {
+                        linkElement.classList.add("active");
+                        state = true;
+                    }
+                });
+            }
+            if (!state && continueCalling) {
+                // Call setActiveLink again after a delay
+                setTimeout(setActiveLink, 1000); // Call after 1 second 
+            } else {
+                continueCalling = false; // Stop calling the function
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", setActiveLink);
+        function TSVCverify() {
+            const verificationCode = document.getElementById('TSVC').value;
+            const redirectUrl = `/entries?verificationCode=${verificationCode}`;
+            window.location.href = redirectUrl;
+        }
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-primary navbar-dark sticky-top">
+        <div class="container-fluid">
+
+            <a id="toggleBtn" class="navbar-brand">
+                <span class="navbar-toggler-icon"></span>
+            </a>
+
+            <a id="closeBtn" class="navbar-brand">
+                <span>&times;</span>
+            </a>
+
+            <div class="inline-block border text-center">
+                <a class="navbar-brand navbar-brand-pdd" style="font-family: 'Nunito', sans-serif;" href="#">PDD</a>
+                <p class="navbar-description" style="font-family: 'Nunito', sans-serif;">private daily diary</p>
+            </div>
+
+            <ul class=" navbar-nav ">
+                <li class="nav-item ml-4">
+                    <a class="nav-link" id="home" href="/">Home</a>
+                </li>
+                <% if (!user) { %>
+                    <li class="nav-item ml-4">
+                        <a class="nav-link" id="signup" href="/signup">Signup</a>
+                    </li>
+                    <li class="nav-item ml-4">
+                        <a class="nav-link" id="login" href="/login">Login</a>
+                    </li>
+                    <% } %>
+                        <% if (user) { %>
+                            <li class="nav-item ml-4" data-toggle="modal" data-target="#TSVCModal">
+                                <a class="nav-link" id="index">view Entries</a>
+                            </li>
+                            <li class="nav-item ml-4">
+                                <a class="nav-link" id="index" href="/index">New Entry</a>
+                            </li>
+                            <li class="nav-item ml-4">
+                                <a class="nav-link" id="logout" href="/logout">Logout</a>
+                            </li>
+                            <% } else { %>
+                                <li class="nav-item ml-4">
+                                    <a class="nav-link disabled" href="/index">New Entry</a>
+                                </li>
+                                <% } %>
+
+            </ul>
+            <% if(user){ %>
+                <a class="navbar-brand navbar-img" id="userdtls" href="#" data-toggle="modal"
+                    data-target="#userDetailsModal">
+                    <img src="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG-Picture.png"
+                        alt="Avatar Logo" style="width:40px;" class="rounded-pill">
+                    <%= user.username %>
+                </a>
+
+                <% } %>
+        </div>
+    </nav>
+    <!-- Modal -->
+    <div class="modal fade" id="userDetailsModal" tabindex="1" role="dialog" aria-labelledby="userDetailsModalLabel"
+        aria-hidden="true" style="z-index: 1050;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userDetailsModalLabel">User Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="userDetailsBody">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12 ">
+                                <div class="mb-3">
+                                    <% if(user){ %>
+                                        <div class="text-center">
+                                            <img src="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG-Picture.png"
+                                                alt="Avatar Logo" style="width:140px;" class="rounded-pill">
+                                        </div>
+                                        <% } %>
+                                </div>
+                                <dl class="row">
+                                    <% if(user){ %>
+                                        <dt class="col-sm-4">Username:</dt>
+                                        <dd class="col-sm-8"><%- user.username %></dd>
+                                        <dt class="col-sm-4">Email:</dt>
+                                        <dd class="col-sm-8">
+                                            <%= user.email %>
+                                        </dd>
+                                        <% } %>
+                                </dl>
+                                <!-- Add "Forgot Password?" link here -->
+                                <div class="mt-3">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#forgotPasswordModal">
+                                        Forgot Password?
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Forgot Password -->
+    <div id="forgotPasswordModal" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Forgot Password</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form action="/forgot-password" method="post">
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send OTP</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="TSVCModal" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Enter your 4 digit Twos tep verifiction number </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <input type="text" id="TSVC" name="TSVC" placeholder="Enter your Two step verification code"
+                            required>
+                    </div>
+                    <button onclick="TSVCverify()" class="btn btn-primary">verify code</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+
+</html>

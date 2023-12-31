@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Diary</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- jQuery and Popper.js scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Favicon -->
+    <link rel="icon" href="../img/signup-bg.webp" type="image/webp">
+
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../styles/home.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            background-color: #ffffff;
+            margin-top: 50px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .logout-btn {
+            margin-bottom: 10px;
+        }
+
+        .welcome-message {
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Style for the textarea */
+        #myTextarea {
+            resize: both;
+            /* Allow resizing both vertically and horizontally */
+            overflow: auto;
+            /* Show scrollbars if content overflows */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Include header here -->
+
+    <%-include('header') %>
+        <%- include('Toast')%>
+            <div class="container">
+                <h1 class="text-center">Daily Diary</h1>
+                <div class="row justify-content-end">
+                    <a href="/logout" class="btn btn-danger logout-btn">Logout</a>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <% if (user) { %>
+                            <p class="welcome-message">Welcome, <%= user.username %>!</p>
+                            <% } %>
+                                <form action="/create-entry" method="POST" id="diaryForm">
+                                    <div class="form-group">
+                                        <label for="date">Date:</label>
+                                        <input type="date" class="form-control" id="date" name="date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Title:</label>
+                                        <input type="text" class="form-control" id="title" name="title" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="body">Body:</label>
+                                        <textarea class="form-control" id="editor" name="body" rows="8"
+                                            required></textarea>
+                                    </div>
+                                    <input type="button" class="btn btn-primary" onclick="submitDiaryForm()"
+                                        value="Create Entry">
+                                </form>
+                    </div>
+                </div>
+            </div>
+            <!-- TinyMCE scripts -->
+            <script
+                src="https://cdn.tiny.cloud/1/u224myd2678g6mwhzrq6spaskic2pffg8prygf5jdojsm1hp/tinymce/5/tinymce.min.js"></script>
+            <script>
+                // Function to get the current date in dd-mm-yyyy format
+                function getCurrentDate() {
+                    var today = new Date();
+                    var dd = String(today.getDate()).padStart(2, '0');
+                    var mm = String(today.getMonth() + 1).padStart(2, '0');
+                    var yyyy = today.getFullYear();
+                    return yyyy + '-' + mm + '-' + dd;
+                }
+
+                // Function to get the current day of the week
+                function getCurrentDay(date) {
+                    var selectedDate = new Date(date);
+                    var dayOfWeek = selectedDate.getDay();
+                    var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    return daysOfWeek[dayOfWeek];
+                }
+
+                const titleInput = document.getElementById('title');
+                const editorElement = document.getElementById('editor');
+                const dateInput = document.getElementById('date');
+                let typingTimer; // Timer identifier
+                const doneTypingInterval = 1000; // Time in milliseconds (1 second)
+
+                titleInput.addEventListener('input', function (event) {
+                    clearTimeout(typingTimer); // Clear the previous timer
+
+                    // Set a new timer to check for the end of typing
+                    typingTimer = setTimeout(function () {
+                        let text = titleInput.value;
+                        tinymce.get('editor').setContent(`Date: ${getCurrentDate()}\n<center><h2>${text}</h2></center><hr><br>\n\n`);
+                    }, doneTypingInterval);
+
+
+                });
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Set the default document title with the current day of the week
+                    document.title = getCurrentDay(getCurrentDate());
+
+                    // Your existing code...
+                    dateInput.value = getCurrentDate();
+                    let inputValue = '';
+
+                    // Set the default value for titleInput to the current day of the week
+                    titleInput.value = getCurrentDay(getCurrentDate());
+
+                    // Function to update values based on the selected date
+                    function updateValues(selectedDate) {
+                        document.title = getCurrentDay(selectedDate);
+                        titleInput.value = getCurrentDay(selectedDate);
+                        tinymce.get('editor').setContent(`Date: ${selectedDate}\n<center><h2>${getCurrentDay(selectedDate)}</h2></center><hr><br>\n\n`);
+                    }
+
+                    // Add an event listener to the date input field
+                    dateInput.addEventListener('input', function (event) {
+                        const selectedDate = event.target.value;
+                        updateValues(selectedDate);
+                    });
+
+                    tinymce.init({
+                        apiKey: 'u224myd2678g6mwhzrq6spaskic2pffg8prygf5jdojsm1hp',
+                        selector: '#editor',
+                        height: 500,
+                        toolbar: 'formatselect | bold italic lists underline strikethrough | alignleft aligncenter alignright alignjustify | ' +
+                            'bullist numlist outdent indent | link image table hr',
+                        plugins: ' link image imagetools table hr',
+                        menubar: false,
+                        content_style: 'body { font-family: Arial, sans-serif; font-size: 16px; }',
+                        setup: function (editor) {
+                            // Use the init event to ensure that the editor is fully initialized
+                            editor.on('init', function () {
+                                editor.setContent(`Date: ${getCurrentDate()}\n<center><h2>${titleInput.value}</h2></center><hr><br>\n\n`);
+                            });
+
+                            editor.on('change', function () {
+                                // You can save the current state or perform other actions here
+                            });
+                        }
+                    });
+                });
+                function submitDiaryForm() {
+                    const form = document.getElementById('diaryForm');
+                    const editorContent = tinymce.get('editor').getContent();
+
+                    // Set the content of the hidden textarea to the TinyMCE content
+                    form.elements['body'].value = editorContent;
+                    // Submit the form
+                    form.submit();
+                }
+            </script>
+
+
+
+
+
+
+
+
+</body>
+
+</html>

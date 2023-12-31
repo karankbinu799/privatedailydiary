@@ -1,0 +1,147 @@
+body {
+
+  position: relative;
+  overflow: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: url('../img/signup-bg.webp') no-repeat center center fixed;
+  background-size: cover;
+  filter: blur(49px); /* Adjust the blur radius as needed */
+  z-index: -1; /* Send the pseudo-element to the background */
+}
+
+
+  .container {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #b9d7e86d;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 0px rgba(0.8, 0.9, 0.7, 0.5);
+    border-radius: 30px;
+  }
+
+  h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+    border-radius: 13px;
+    box-sizing: border-box;
+  }
+
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="password"]:focus {
+    outline: 4px;
+    border-radius: 30px;
+  }
+
+  input[type="text"]:hover,
+  input[type="email"]:hover,
+  input[type="password"]:hover {
+    border: 1px #108acc;
+    box-shadow: 0px 0px 5px 0px rgba(23, 138, 215, 0.904);
+
+  }
+
+  .btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    border-radius: 13px;
+    text-align: center;
+  }
+
+  .btn:hover {
+    background-color: #13c354;
+    border: 1px #108acc;
+    border-radius: 30px;
+    color: rgb(255, 255, 255);
+    box-shadow: 0px 0px 5px 0px rgba(23, 138, 215, 0.904);
+  }
+
+  .form-group {
+    position: relative;
+  }
+
+  .form-group i {
+    position: absolute;
+    right: 10px;
+    top: 15px;
+    color: rgb(127, 180, 201);
+  }
+
+  #toggleTSVCinput,#togglePassword,#toggleConfirmPassword {
+    cursor: pointer;
+    font-size: large;
+    color:#007bff;
+  }
+
+  #toggleTSVCinput:hover,#togglePassword:hover,
+  #toggleConfirmPassword:hover{
+    color: #13c354;
+    
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .bg {
+    background: linear-gradient(45deg, #f64747, #9775fa);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+  a{
+    color: #000000;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .forgot-password{
+    color: #dff8ff;
+    font-size: 14px;
+  }
+  .rememberMe{
+    margin-left: 22px;
+    margin-bottom: 10px;
+    color: rgb(255, 255, 255);
+  }
+  .rememberMe input[type='checkbox']:checked{
+    background-color: rgba(24, 236, 38, 0.922);
+  }
+  .rememberMe input[type='checkbox']:not(:checked){
+    background-color: rgb(221, 224, 255);
+    border: 1px solid blue;
+  }
